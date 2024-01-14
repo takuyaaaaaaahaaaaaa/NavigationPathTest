@@ -36,6 +36,9 @@ struct ContentView: View {
                     }
                 })
             }
+            // Add animation modifier
+            // because the animation of the next screen will not work after returning to the top on iOS17 and below.
+            .animation(.linear, value: navigationModel.path)
             .environmentObject(navigationModel)
             .tabItem {
                 Image(systemName: "house")
@@ -44,7 +47,6 @@ struct ContentView: View {
             .tag(BaseTab.top)
         }
     }
-
 }
 
 struct ChildView: View {
@@ -79,7 +81,13 @@ class NavigationModel: ObservableObject {
     }
 
     func popToTop() {
-        path = []
+        // Add animation modifier
+        // because the animation of the next screen will not work after returning to the top on iOS17 and below.
+        if #unavailable(iOS 17) {
+            withAnimation(.linear(duration: 0)) {
+                path.removeAll()
+            }
+        }
     }
 }
 
