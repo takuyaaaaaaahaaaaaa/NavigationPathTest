@@ -38,12 +38,13 @@ struct ContentView: View {
             }
             .environmentObject(navigationModel)
             .tabItem {
-                Image(systemName: "return")
-                Text("Return Top")
+                Image(systemName: "house")
+                Text("Top")
             }
             .tag(BaseTab.top)
         }
     }
+
 }
 
 struct ChildView: View {
