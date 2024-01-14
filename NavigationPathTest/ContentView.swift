@@ -24,7 +24,7 @@ struct ContentView: View {
             NavigationStack(path: $navigationModel.path) {
                 VStack(spacing: 10) {
                     Button {
-                        navigationModel.push(.child)
+                        navigationModel.push([.child])
                     } label: {
                         Text("Push to ChildView")
                     }
@@ -52,7 +52,7 @@ struct ChildView: View {
     var body: some View {
         VStack {
             Button {
-                model.push(.child)
+                model.push([.child])
             } label: {
                 Text("Child View")
             }
@@ -72,10 +72,6 @@ class NavigationModel: ObservableObject {
 
     func push(_ destinations: [PushDestination]) {
         path.append(contentsOf: destinations)
-    }
-
-    func push(_ destination: PushDestination) {
-        path.append(destination)
     }
 
     func pop() {
