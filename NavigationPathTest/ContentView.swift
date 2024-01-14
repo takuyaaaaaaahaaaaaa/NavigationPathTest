@@ -32,7 +32,7 @@ struct ContentView: View {
                 .navigationDestination(for: PushDestination.self, destination: { destination in
                     switch destination {
                     case .child:
-                        NextView()
+                        ChildView()
                     }
                 })
             }
@@ -61,7 +61,7 @@ struct ContentView: View {
     }
 }
 
-struct NextView: View {
+struct ChildView: View {
     @EnvironmentObject private var model: NavigationModel
     var body: some View {
         VStack {
