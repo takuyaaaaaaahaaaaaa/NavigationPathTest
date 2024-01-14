@@ -20,7 +20,7 @@ struct ContentView: View {
     @State var selectedTab: BaseTab = .top
     var body: some View {
         let _ = Self._printChanges()
-        TabView(selection: tabSelection()) {
+        TabView(selection: $selectedTab) {
             NavigationStack(path: $navigationModel.path) {
                 VStack(spacing: 10) {
                     Button {
@@ -42,21 +42,6 @@ struct ContentView: View {
                 Text("Return Top")
             }
             .tag(BaseTab.top)
-        }
-    }
-
-    /// タブダブルタップ時に初期画面に遷移
-    private func tabSelection() -> Binding<BaseTab> {
-        Binding {
-            selectedTab
-        } set: { tappedTab in
-            if tappedTab == selectedTab {
-                switch tappedTab {
-                case .top:
-                    navigationModel.popToTop()
-                }
-            }
-            selectedTab = tappedTab
         }
     }
 }
