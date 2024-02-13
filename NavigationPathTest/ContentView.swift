@@ -7,16 +7,10 @@
 
 import SwiftUI
 
-enum BaseTab {
-    case top
-}
-
 struct ContentView: View {
     @StateObject var router: Router = .init()
-    @State var selectedTab: BaseTab = .top
     var body: some View {
-        let _ = Self._printChanges()
-        TabView(selection: $selectedTab) {
+        TabView {
             NavigationStack(path: $router.path) {
                 VStack(spacing: 10) {
                     Button {
@@ -32,15 +26,10 @@ struct ContentView: View {
                     }
                 })
             }
-            // Add animation modifier
+            // ⭐️ Add animation modifier
             // because the animation of the next screen will not work after returning to the top on iOS17 and below.
-            .animation(.linear, value: router.path)
+            .animation(.default, value: router.path)
             .environmentObject(router)
-            .tabItem {
-                Image(systemName: "house")
-                Text("Top")
-            }
-            .tag(BaseTab.top)
         }
     }
 }
@@ -64,12 +53,11 @@ struct ChildView: View {
     }
 }
 
-/// Navigation遷移モデル
 class Router: ObservableObject {
     enum Destination {
         case child
     }
-    
+
     @Published var path: [Destination] = []
 
     func push(_ destinations: [Destination]) {
