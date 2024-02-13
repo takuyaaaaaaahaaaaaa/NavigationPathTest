@@ -11,25 +11,21 @@ enum BaseTab {
     case top
 }
 
-enum PushDestination {
-    case child
-}
-
 struct ContentView: View {
-    @StateObject var navigationModel: NavigationModel = .init()
+    @StateObject var router: Router = .init()
     @State var selectedTab: BaseTab = .top
     var body: some View {
         let _ = Self._printChanges()
         TabView(selection: $selectedTab) {
-            NavigationStack(path: $navigationModel.path) {
+            NavigationStack(path: $router.path) {
                 VStack(spacing: 10) {
                     Button {
-                        navigationModel.push([.child])
+                        router.push([.child])
                     } label: {
                         Text("Push to ChildView")
                     }
                 }
-                .navigationDestination(for: PushDestination.self, destination: { destination in
+                .navigationDestination(for: Router.Destination.self, destination: { destination in
                     switch destination {
                     case .child:
                         ChildView()
@@ -38,8 +34,8 @@ struct ContentView: View {
             }
             // Add animation modifier
             // because the animation of the next screen will not work after returning to the top on iOS17 and below.
-            .animation(.linear, value: navigationModel.path)
-            .environmentObject(navigationModel)
+            .animation(.linear, value: router.path)
+            .environmentObject(router)
             .tabItem {
                 Image(systemName: "house")
                 Text("Top")
@@ -50,7 +46,7 @@ struct ContentView: View {
 }
 
 struct ChildView: View {
-    @EnvironmentObject private var model: NavigationModel
+    @EnvironmentObject private var model: Router
     var body: some View {
         VStack {
             Button {
@@ -69,10 +65,14 @@ struct ChildView: View {
 }
 
 /// Navigation遷移モデル
-class NavigationModel: ObservableObject {
-    @Published var path: [PushDestination] = []
+class Router: ObservableObject {
+    enum Destination {
+        case child
+    }
+    
+    @Published var path: [Destination] = []
 
-    func push(_ destinations: [PushDestination]) {
+    func push(_ destinations: [Destination]) {
         path.append(contentsOf: destinations)
     }
 
