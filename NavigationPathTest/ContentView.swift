@@ -87,6 +87,8 @@ class NavigationModel: ObservableObject {
             withAnimation(.linear(duration: 0)) {
                 path.removeAll()
             }
+        } else {
+            path.removeAll()
         }
     }
 }
